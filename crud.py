@@ -36,17 +36,33 @@ def criar_tabela():
 def select_contrato():
         try:
             id_contrato = input('Digite o Id: ')
-            sql = (f'Select * from {TABLE_NAME} where ID_CONTRATO_AULA == ?')
-            cursor.execute(sql,(id_contrato).split())
-            resultados = cursor.fetchall()
-            for id, nome, valor, qntd in resultados:
-                print(f'ID {id} - {nome} - R${valor},00 - {qntd}x')
+            list_id = []
+            if id_contrato:
+                sql = (f'Select * from {TABLE_NAME} where ID_CONTRATO_AULA == ?')
+                cursor.execute(sql,(id_contrato,))
+                resultados = cursor.fetchall()
+                list_id.append(id_contrato)
+                return list_id
+            else: 
+                nome_contrato = input('Digite o nome do contrato: ')
+                sql = (f'Select * from {TABLE_NAME} where NOME_CONTRATO_AULA = ?')
+                cursor.execute(sql,(nome_contrato,))
+                resultados = cursor.fetchall()
+                for rows in resultados:
+                       id_contrato = rows[0]
+                       nome_contrato = rows[1]
+                       print(id_contrato, nome_contrato)
+                       list_id.append(id_contrato)
+                return list_id
+
         except Exception as e:
             raise ValueError(f'Erro para visualizar dados: {e}')
-        return id_contrato
+        
 #Cadastrando contratos:
 def insert_values (nome_contrato,valor,qntd_semana):
     try:
+        
+
         sql = (f'INSERT INTO {TABLE_NAME} (NOME_CONTRATO_AULA, VALOR, QNTD_SEMANA) VALUES (?,?,?)')
         cursor.execute(sql,[nome_contrato,valor,qntd_semana])
         connection.commit()
@@ -71,28 +87,32 @@ def tabela_contratos_aulas():
         
         if answer == 'C':
 
-            nome_contrato = input('Digite o nome do contrato: ')
+            
             cursor.execute(f'Select NOME_CONTRATO_AULA from {TABLE_NAME}')
             resultado = cursor.fetchall()
-            nome_in = False #Check nome já existe
-
-            for i in resultado[0]:
-                if i == nome_contrato:
-                    print('Esse nome já está cadastrado')
-                    nome_in = True
-                    
-
-            if nome_in == False:
+            lista_contratos = [resultado[0] for resultado in resultado]
+        
+           
+            nome_contrato = input('Digite o nome do contrato: ')
+            if nome_contrato in lista_contratos:
+                print('Esse contrato já está cadastrado.')
+            else:
                 valor = input('Digite o valor do contrato: ')
                 qntd_semana = input('Digite quantidade de aulas permitidas: ')
                 return insert_values(nome_contrato, valor, qntd_semana)
 
         
         if answer == 'D':
+            cursor.execute(f'Select ID_CONTRATO_AULA, NOME_CONTRATO_AULA from {TABLE_NAME}')
+            resultado = cursor.fetchall()
+            for i in resultado:
+                print(*i)
             id_contrato_aula = select_contrato()
             answer = input('Confirma exclusão? [Y] [N]: ').upper()
             if answer == 'Y':
-                return delete_contrato(id_contrato_aula)
+                for id in id_contrato_aula: 
+                        delete_contrato(id)
+                return print('Deletado com sucesso')
         
 
         if answer == 'M':

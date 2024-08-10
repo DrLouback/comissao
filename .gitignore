@@ -2,3 +2,4 @@
 .env
 databases
 docker-compose.yml
+secrets.toml
