@@ -7,7 +7,7 @@ import time
 # Definições de caminho
 ROOT_DIR = Path(__file__).parent
 DB_NAME = 'db.sqlite3'
-DB_FILE = ROOT_DIR / 'databases' / DB_NAME
+DB_FILE = ROOT_DIR /'..'/ 'databases' / DB_NAME
 
 def criar_tabela():
     try:
