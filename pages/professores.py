@@ -8,7 +8,7 @@ import time
 ROOT_DIR = Path(__file__).parent
 DB_NAME = 'db.sqlite3'
 DB_FILE = ROOT_DIR /'..'/ 'databases' / DB_NAME
-
+st.page_link('home.py',label='Home')
 def tabela_professores():
     try:
         

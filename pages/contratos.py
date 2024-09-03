@@ -8,7 +8,7 @@ import time
 ROOT_DIR = Path(__file__).parent
 DB_NAME = 'db.sqlite3'
 DB_FILE = ROOT_DIR /'..'/ 'databases' / DB_NAME
-
+st.page_link('home.py',label='Home')
 def criar_tabela():
     try:
         
@@ -79,6 +79,7 @@ column_configuration = {
 st.title('Contratos')
 col1, col2, col3, col4 = st.columns([2,1,1,1], vertical_alignment= 'bottom')
 event = st.dataframe(df_coluna, use_container_width=True, hide_index=True, column_config= column_configuration, on_select='rerun' , selection_mode='multi-row') 
+
 with col1:
     contrato = st.text_input('Nome do contrato')
 with col2:
@@ -102,7 +103,7 @@ with col4:
             
             success_placeholder.success("Contrato cadastrado com sucesso")
             time.sleep(2)
-            st.rerun()
+            st.rerun(scope='app')
          
 
 
@@ -120,7 +121,7 @@ if event:
             df = pd.read_sql_query(query,conn)
             st.success('Contrato Deletado')
             time.sleep(2)
-            st.rerun
+            st.rerun(scope='app')
     
 st.dataframe(contratos_filtrados.iloc[:,0:4], column_config= column_configuration, use_container_width= True, hide_index=True)
 conn.close()

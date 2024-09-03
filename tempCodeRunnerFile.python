@@ -1,0 +1,10 @@
+class Solution:
+    def twoSum(self, nums: list[int], target: int) -> list[int]: # type: ignore
+        n = 0
+        for i in range(0,len(nums)): # type: ignore
+            n = nums[i]
+            if nums[i] + n == target:
+                print([nums[n],nums[i]])
+            
+r = Solution()
+r.twoSum([2,7,11,15],9)
